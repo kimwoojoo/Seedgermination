@@ -1,0 +1,8 @@
+{% extends "Seed/index.html" %}
+{% block content %}
+<form style="margin-bottom: 100px;" id = "form-control" class="form-control" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+          {{ form }}
+      <input form = "form-control" class="form-control" type="submit" value="Upload" />
+</form>
+{% endblock %}

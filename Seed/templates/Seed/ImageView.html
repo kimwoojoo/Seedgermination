@@ -1,0 +1,208 @@
+{% extends "Seed/index.html" %}
+{% load staticfiles %}
+{% block content %}
+         <div class="row">
+             <div class="col-md-6 text-center">
+                 <h3>TEST SEED</h3>
+                 <hr class="star-light">
+                 <img src="{% static 'test.jpg' %}"class="img-fluid"/>
+             </div>
+             <div class="col-md-6 text-center">
+                 <div id="pieChart" ></div>
+             </div>
+         </div>
+         <div class="row">
+
+             <!--pieChart 클릭하면 오른쪽 이미지 바뀌게-->
+             <div class="col-md-12 text-center">
+                 <div></div>
+             </div>
+
+         </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h3>이미지</h3>
+            </div>
+        </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.4.4/d3.min.js"></script>
+<script type="text/javascript" src="{% static 'js/d3pie.min.js' %}"></script>
+<script>
+$(document).ready(function()
+                        {
+                            var ColorArray = ["#E53A40", "#e85a71","#7e3838", "#7e6538" , "#7c7e38" , "#587e38", "#387e45" , "#387e6a", "#386a7e","#00dffc" ];
+                            var str = "";
+                        	$.ajax({
+                        		url : "{% url 'GetJsonData' %}",
+                        		data : {'id': '1' ,'csrfmiddlewaretoken': '{{ csrf_token }}'},
+                        		type : 'post',
+                        		dayaType:'json',
+                        		success : function(data)
+                        		{
+                                     var JArray = new Array();
+                                     var i = 0;
+                                     for (var key in data)
+                                     {
+                                     var JObject = new Object();
+                                     JObject.label = key;
+                                     JObject.value = parseFloat(data[key]);
+                                     JObject.color = ColorArray[i];
+                                     i++;
+                                     JArray.push(JObject);
+                                      }
+                                      <!-- chart1 시작-->
+                                      var pie = new d3pie("pieChart", {
+                                  		    "header": {
+                                  		    "title": {
+                                  		    "text": "씨앗발아확인",
+                                  		    "fontSize": 20,
+                                  		    "font": "verdana",
+                                          "fontweight" : ""
+
+                                  		},
+                                  		"titleSubtitlePadding": 12
+                                  		},
+                                  		"footer": {
+                                  		"text": "",
+                                  		"color": "#999999",
+                                  		"fontSize": 15,
+                                  		"font": "open sans",
+                                  		"location": "bottom-center"
+                                  		},
+                                  		"size": {
+                                  		"canvasHeight": 400,
+                                  		"canvasWidth": 590,
+                                  		"pieOuterRadius": "88%"
+                                  		},
+                                  		"data": {
+                                  		"content": JArray
+                                  		}
+                                  		,tooltips:{
+                                  		enabled: true,
+                                  		type: "placeholder",
+                                  		string: "{label}, {value}, {percentage}%"
+                                  		}
+                                  		,
+                                  		"labels": {
+                                  		"outer": {
+                                  		"pieDistance": 32
+                                  		},
+                                  		"inner": {
+                                  		"format": "value"
+                                  		},
+                                  		"mainLabel": {
+                                  		"font": "verdana"
+                                  		},
+                                  		"percentage": {
+                                  		"color": "#e1e1e1",
+                                  		"font": "verdana",
+                                  		"decimalPlaces": 0
+                                  		},
+                                  		"value": {
+                                  		"color": "#e1e1e1",
+                                  		"font": "verdana"
+                                  		},
+                                  		"lines": {
+                                  		"enabled": true,
+                                  		"color": "#cccccc"
+                                  		},
+                                  		"truncation": {
+                                  		"enabled": true
+                                  		}
+                                  		},
+                                  		"effects": {
+                                  		"pullOutSegmentOnClick": {
+                                  			"effect": "linear",
+                                  			"speed": 400,
+                                  			"size": 15
+                                  			}
+                                  			}
+                                 });
+                                 <!-- chart1 끝-->
+
+
+
+                                 <!-- chart2 시작-->
+                                 var pie = new d3pie("rightImg", {
+                             		    "header": {
+                             		    "title": {
+                             		    "text": "씨앗발아확인",
+                             		    "fontSize": 20,
+                             		    "font": "verdana"
+                             		},
+                             		"subtitle": {
+                             		"text": "",
+                             		"color": "#999999",
+                             		"fontSize": 10,
+                             		"font": "verdana"
+                             		},
+                             		"titleSubtitlePadding": 12
+                             		},
+                             		"footer": {
+                             		"text": "",
+                             		"color": "#999999",
+                             		"fontSize": 11,
+                             		"font": "open sans",
+                             		"location": "bottom-center"
+                             		},
+                             		"size": {
+                             		"canvasHeight": 400,
+                             		"canvasWidth": 590,
+                             		"pieOuterRadius": "88%"
+                             		},
+                             		"data": {
+                             		"content": JArray
+                             		}
+                             		,tooltips:{
+                             		enabled: true,
+                             		type: "placeholder",
+                             		string: "{label}, {value}, {percentage}%"
+                             		}
+                             		,
+                             		"labels": {
+                             		"outer": {
+                             		"pieDistance": 32
+                             		},
+                             		"inner": {
+                             		"format": "value"
+                             		},
+                             		"mainLabel": {
+                             		"font": "verdana"
+                             		},
+                             		"percentage": {
+                             		"color": "#e1e1e1",
+                             		"font": "verdana",
+                             		"decimalPlaces": 0
+                             		},
+                             		"value": {
+                             		"color": "#e1e1e1",
+                             		"font": "verdana"
+                             		},
+                             		"lines": {
+                             		"enabled": true,
+                             		"color": "#cccccc"
+                             		},
+                             		"truncation": {
+                             		"enabled": true
+                             		}
+                             		},
+                             		"effects": {
+                             		"pullOutSegmentOnClick": {
+                             			"effect": "linear",
+                             			"speed": 400,
+                             			"size": 8
+                             			}
+                             			}
+                            });
+                            <!-- chart2 끝-->
+
+                    },
+                    error: function()
+                    {
+                        alert("error");
+                    }
+               });
+           });
+
+</script>
+{% endblock %}
